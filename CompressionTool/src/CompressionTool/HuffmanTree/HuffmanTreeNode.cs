@@ -2,8 +2,8 @@
 public class HuffmanTreeNode
 {
   // An internal node has no element
-  private char? element;
-  private int weight;
+  public char? element;
+  public int weight;
   private HuffmanTreeNode? leftNode;
   private HuffmanTreeNode? rightNode;
 
@@ -11,16 +11,6 @@ public class HuffmanTreeNode
   {
     this.element = element;
     this.weight = weight;
-  }
-
-  public char? GetElement()
-  {
-    return element;
-  }
-
-  public int GetWeight()
-  {
-    return weight;
   }
 
   public HuffmanTreeNode? GetLeftNode()
@@ -46,5 +36,10 @@ public class HuffmanTreeNode
   public bool isLeaf()
   {
     return leftNode == null && rightNode == null;
+  }
+
+  public bool Equals(HuffmanTreeNode node)
+  {
+    return node.element == element && node.weight == weight;
   }
 }
