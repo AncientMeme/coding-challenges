@@ -2,23 +2,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET Run Tests",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "dotnet test",
-      "program": "${workspaceFolder}/test/CompressionTool.Test/bin/Debug/net6.0/CompressionTool.Test.dll",
-      "args": [],
-      "cwd": "${workspaceFolder}",
-      "stopAtEntry": false,
-      "console": "internalConsole"
-    },
-    {
       "name": ".NET Core Launch (console)",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet build",
       "program": "${workspaceFolder}/src/CompressionTool/bin/Debug/net6.0/CompressionTool.dll",
-      "args": ["src/CompressionTool/hello.txt"],
+      "args": ["encode", "src/CompressionTool/hello.txt", "src/CompressionTool/out.txt"],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
       "console": "integratedTerminal"

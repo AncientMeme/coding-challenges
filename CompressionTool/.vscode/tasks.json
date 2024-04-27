@@ -10,16 +10,6 @@
       },
       "problemMatcher": "$msCompile",
       "label": "dotnet build"
-    },
-    {
-      "type": "dotnet",
-      "task": "build",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "problemMatcher": "$msCompile",
-      "label": "dotnet test"
     }
   ]
 }
