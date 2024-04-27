@@ -5,11 +5,10 @@ public class CharCounterTest
   public void CharFrequencyTest()
   {
     // Arrange
-    var counter = new CharCounter();
     var content = "dddaacccccbbb";
 
     // Act
-    var dict = counter.GetCharFrequency(content);
+    var dict = CharCounter.GetCharFrequency(content);
     
     // Assert
     var expectedKeys = new char[]{'a', 'b', 'c', 'd'};
