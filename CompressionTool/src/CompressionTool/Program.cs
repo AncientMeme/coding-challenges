@@ -5,15 +5,25 @@ var fileArgument = new Argument<FileInfo?>(
   name: "file",
   description: "The file to be compressed"
 );
+var outputArgument = new Argument<FileInfo?>(
+  name: "output",
+  description: "The name of the compressed file"
+);
 
-var rootCommand = new RootCommand("Command line tool to compress files");
-rootCommand.AddArgument(fileArgument);
+// Sub commands
+var encodeCommand = new Command("encode", "Compress target file using Huffman encoding");
+encodeCommand.AddArgument(fileArgument);
+encodeCommand.AddArgument(outputArgument);
+encodeCommand.SetHandler(CompressFile, fileArgument, outputArgument);
 
-rootCommand.SetHandler(CompressFile, fileArgument);
+// Root command
+var rootCommand = new RootCommand("Command line tool to compress and decompress files");
+rootCommand.Add(encodeCommand);
+
 await rootCommand.InvokeAsync(args);
 
 // Run main function
-void CompressFile(FileInfo? info) 
+void CompressFile(FileInfo? info, FileInfo? outputInfo) 
 {
   if (info == null)
   {
