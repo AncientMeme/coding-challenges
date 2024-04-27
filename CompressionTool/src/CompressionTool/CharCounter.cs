@@ -1,11 +1,6 @@
 
 public class CharCounter
 {
-  public CharCounter()
-  {
-
-  }
-
   public Dictionary<char, int> GetCharFrequency(string content)
   {
     Dictionary<char, int> dict = new();

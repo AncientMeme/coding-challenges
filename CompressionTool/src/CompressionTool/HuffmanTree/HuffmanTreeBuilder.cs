@@ -27,19 +27,11 @@ public class HuffmanTreeBuilder
       var nodeA = queue.Dequeue();
       var nodeB = queue.Dequeue();
 
-      // Create inner node and attach smaller weight node on left
+      // Weight of nodeA is always smaller due to priority queue
       int innerWeight = nodeA.weight + nodeB.weight;
       var innerNode = new HuffmanTreeNode(null, innerWeight);
-      if (nodeA.weight < nodeB.weight)
-      {
-        innerNode.SetLeftNode(nodeA);
-        innerNode.SetRightNode(nodeB);
-      }
-      else
-      {
-        innerNode.SetLeftNode(nodeB);
-        innerNode.SetRightNode(nodeA);
-      }
+      innerNode.SetLeftNode(nodeA);
+      innerNode.SetRightNode(nodeB);
 
       // Readd into queue
       queue.Enqueue(innerNode, innerWeight);
