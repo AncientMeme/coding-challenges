@@ -1,11 +1,6 @@
 
 public class HuffmanTreeBuilder
 {
-  public HuffmanTreeBuilder()
-  {
-
-  }
-
   public HuffmanTreeNode BuildTree(Dictionary<char, int> charFrequency)
   {
     // Empty frequency table handling

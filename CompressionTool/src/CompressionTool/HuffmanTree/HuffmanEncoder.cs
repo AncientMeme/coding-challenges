@@ -28,6 +28,6 @@ public class HuffmanEncoder
       }
     }
 
-    return codeTable; 
+    return codeTable;
   }
 }

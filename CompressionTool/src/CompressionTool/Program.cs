@@ -5,7 +5,7 @@ var fileArgument = new Argument<FileInfo?>(
   name: "file",
   description: "The file to be compressed"
 );
-var outputArgument = new Argument<FileInfo?>(
+var outputArgument = new Argument<string?>(
   name: "output",
   description: "The name of the compressed file"
 );
@@ -23,7 +23,7 @@ rootCommand.Add(encodeCommand);
 await rootCommand.InvokeAsync(args);
 
 // Run main function
-void CompressFile(FileInfo? info, FileInfo? outputInfo) 
+void CompressFile(FileInfo? info, string? outputInfo) 
 {
   if (info == null)
   {
