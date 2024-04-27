@@ -23,7 +23,7 @@ rootCommand.Add(encodeCommand);
 await rootCommand.InvokeAsync(args);
 
 // Run main function
-void CompressFile(FileInfo? info, string? outputInfo) 
+void CompressFile(FileInfo? info, string? outputName) 
 {
   if (info == null)
   {
@@ -35,11 +35,21 @@ void CompressFile(FileInfo? info, string? outputInfo)
     Console.WriteLine("The file was not found");
     return;
   }
+  if (outputName == null)
+  {
+    Console.WriteLine("Output file required");
+    return;
+  }
 
+  // Read File
   string fileContent; 
   using (FileStream stream = info.OpenRead())
   using (StreamReader sr = new(stream))
   {
     fileContent = sr.ReadToEnd();
   }
+
+  // Compress File
+  var manager = new CompressionManager();
+  manager.CompressFile(fileContent, outputName);
 }
