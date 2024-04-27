@@ -26,9 +26,10 @@ void CompressFile(FileInfo? info)
     return;
   }
 
+  string fileContent; 
   using (FileStream stream = info.OpenRead())
   using (StreamReader sr = new(stream))
   {
-    Console.Write(sr.ReadToEnd());
+    fileContent = sr.ReadToEnd();
   }
 }
