@@ -1,7 +1,7 @@
 
 public class HuffmanEncoder
 {
-  public Dictionary<char, string> GetEncodingTable(HuffmanTreeNode rootNode)
+  public static Dictionary<char, string> GetEncodingTable(HuffmanTreeNode rootNode)
   {
     var codeTable = new Dictionary<char, string>();
     var queue = new Queue<(HuffmanTreeNode, string)>();
@@ -29,5 +29,18 @@ public class HuffmanEncoder
     }
 
     return codeTable;
+  }
+
+  public static Dictionary<string, char> GetDecodingTable(HuffmanTreeNode rootNode)
+  {
+    Dictionary<string, char> decodingTable = new();
+    // Flip the encoding table
+    var encodingTable = GetEncodingTable(rootNode);
+    foreach(KeyValuePair<char, string> entry in encodingTable)
+    {
+      decodingTable[entry.Value] = entry.Key;
+    }
+
+    return decodingTable;
   }
 }

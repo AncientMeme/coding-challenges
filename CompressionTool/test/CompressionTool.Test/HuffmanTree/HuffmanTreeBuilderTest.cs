@@ -6,12 +6,11 @@ public class HuffmanTreeBuilderTest
   public void BuildEmptyTree()
   {
     // Arrange
-    var builder = new HuffmanTreeBuilder();
     var frequency = new Dictionary<char, int>();
     var expectedNode = new HuffmanTreeNode(null, 0);
 
     // Act
-    var rootNode = builder.BuildTree(frequency);
+    var rootNode = HuffmanTreeBuilder.BuildTree(frequency);
 
     // Assert
     Assert.True(rootNode.Equals(expectedNode));
@@ -33,7 +32,6 @@ public class HuffmanTreeBuilderTest
     node1_0.SetLeftNode(node2_0);
     node1_0.SetRightNode(node2_1);
     
-    var builder = new HuffmanTreeBuilder();
     var frequency = new Dictionary<char, int>(){
       {'a', 3},
       {'b', 1},
@@ -41,7 +39,7 @@ public class HuffmanTreeBuilderTest
     };
 
     // Act
-    HuffmanTreeNode rootNode = builder.BuildTree(frequency);
+    HuffmanTreeNode rootNode = HuffmanTreeBuilder.BuildTree(frequency);
 
     // Assert
     Assert.True(IsIdenticalTree(expectedRootNode, rootNode));

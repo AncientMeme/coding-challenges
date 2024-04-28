@@ -1,7 +1,7 @@
 
 public class HuffmanTreeBuilder
 {
-  public HuffmanTreeNode BuildTree(Dictionary<char, int> charFrequency)
+  public static HuffmanTreeNode BuildTree(Dictionary<char, int> charFrequency)
   {
     // Empty frequency table handling
     if(charFrequency.Count == 0)

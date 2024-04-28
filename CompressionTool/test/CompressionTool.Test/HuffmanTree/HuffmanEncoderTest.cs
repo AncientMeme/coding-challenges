@@ -20,10 +20,9 @@ public class HuffmanEncoderTest
       {'b', "00"},
       {'c', "1"}
     };
-    var encoder = new HuffmanEncoder();
-
+    
     // Act
-    var table = encoder.GetEncodingTable(RootNode);
+    var table = HuffmanEncoder.GetEncodingTable(RootNode);
 
     // Assert
     foreach(KeyValuePair<char, string> entry in expectedTable)
