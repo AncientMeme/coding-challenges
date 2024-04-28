@@ -23,7 +23,7 @@ public class HuffmanEncoderTest
     var encoder = new HuffmanEncoder();
 
     // Act
-    var table = encoder.GetCodeFromTree(RootNode);
+    var table = encoder.GetEncodingTable(RootNode);
 
     // Assert
     foreach(KeyValuePair<char, string> entry in expectedTable)

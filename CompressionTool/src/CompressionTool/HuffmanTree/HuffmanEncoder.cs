@@ -1,7 +1,7 @@
 
 public class HuffmanEncoder
 {
-  public Dictionary<char, string> GetCodeFromTree(HuffmanTreeNode rootNode)
+  public Dictionary<char, string> GetEncodingTable(HuffmanTreeNode rootNode)
   {
     var codeTable = new Dictionary<char, string>();
     var queue = new Queue<(HuffmanTreeNode, string)>();
