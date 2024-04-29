@@ -3,6 +3,7 @@ The repository contains my attempts to the challenges found on:\
 https://codingchallenges.fyi
 
 ## Currently Attempting
-- Build your own compression tool
+
 
 ## Finished Challenge
+- [Build your own compression tool](https://github.com/AncientMeme/coding-challenges/tree/main/CompressionTool)
