@@ -1,4 +1,6 @@
 
+using System.Text;
+
 public class HuffmanEncoder
 {
   public static Dictionary<char, string> GetEncodingTable(HuffmanTreeNode rootNode)
@@ -42,5 +44,65 @@ public class HuffmanEncoder
     }
 
     return decodingTable;
+  }
+
+  public static byte[] Encode(string content, Dictionary<char, string> encodingTable)
+  {
+    List<byte> bytes = new();
+    StringBuilder builder = new();
+    foreach(char c in content)
+    {
+      builder.Append(encodingTable[c]);
+    }
+
+    // Pad 0s on right until length is multiple of 8 (byte)
+    while(builder.Length % 8 != 0)
+    {
+      builder.Append('0');
+    }
+    string binaryString = builder.ToString();
+
+    // Transform binary string to bytes
+    int index = 0;
+    while (index < binaryString.Length)
+    {
+      string chunk = binaryString.Substring(index, 8);
+      bytes.Add(Convert.ToByte(chunk, 2));
+      index += 8;
+    }
+
+    return bytes.ToArray();
+  }
+
+  public static string Decode(byte[] bytes, int bits, Dictionary<string, char> decodingTable)
+  {
+    // Bytes -> BinaryString
+    StringBuilder binary = new();
+    foreach(byte b in bytes)
+    {
+      binary.Append(Convert.ToString(b, 2).PadLeft(8, '0'));
+    }
+    string binaryString = binary.ToString()[..bits];
+
+    // BinaryString -> String
+    StringBuilder builder = new();
+    int index = 0;
+    int size = 1;
+    while(index + size <= binaryString.Length)
+    {
+      var chunk = binaryString.Substring(index, size);
+      if (decodingTable.ContainsKey(chunk))
+      {
+        builder.Append(decodingTable[chunk]);
+        index += size;
+        size = 0;
+      }
+      else
+      {
+        size++;
+      }
+    }
+
+    return builder.ToString();
   }
 }

@@ -31,4 +31,50 @@ public class HuffmanEncoderTest
       Assert.Equal(entry.Value, table[entry.Key]);
     }
   }
+
+  [Fact]
+  public void EncodeTest()
+  {
+    // Arrange
+    var table = new Dictionary<char, string>()
+    {
+      {'a',  "0"},
+      {'\n', "10"},
+      {'\r', "110"},
+      {'b',  "111"},
+    };
+    string content = "aa\r\nb";
+    byte[] expectedBytes = {53, 192};
+
+    // Act
+    var encodeBytes = HuffmanEncoder.Encode(content, table);
+    
+    // Assert
+    Assert.Equal(expectedBytes.Length, encodeBytes.Length);
+    for(int i = 0; i < expectedBytes.Length; ++i)
+    {
+      Assert.Equal(expectedBytes[i], encodeBytes[i]);
+    }
+  }
+
+  [Fact]
+  public void DecodeTest()
+  {
+    // Arrange
+    var table = new Dictionary<string, char>()
+    {
+      {"0", 'a'},
+      {"10", '\n'},
+      {"110", '\r'},
+      {"111",  'b'},
+    };
+    byte[] bytes = {53, 192};
+    string ExpectedString = "aa\r\nb";
+
+    // Act
+    var decodedContent = HuffmanEncoder.Decode(bytes, 10, table);
+    
+    // Assert
+    Assert.Equal(ExpectedString, decodedContent); 
+  }
 }
