@@ -47,8 +47,8 @@ void WordCountHandler(string? fileName, bool countByte, bool countChar, bool cou
   }
 
   // Read the file
-  FileStream file = File.OpenRead(fileName);
   string content;
+  using(FileStream file = File.OpenRead(fileName))
   using(StreamReader reader = new(file))
   {
     content = reader.ReadToEnd();
@@ -61,6 +61,7 @@ void WordCountHandler(string? fileName, bool countByte, bool countChar, bool cou
     noOptions = true;
   }
 
+  // Build Output
   string finalOutput = "";
   if (countLine || noOptions)
   {
@@ -70,16 +71,15 @@ void WordCountHandler(string? fileName, bool countByte, bool countChar, bool cou
   {
     finalOutput += $"{Counter.GetWords(content)} ";
   }
-  if (countChar || noOptions)
+  if (countChar)
   {
     finalOutput += $"{Counter.GetChars(content)} ";
   }
-  if (countByte)
+  if (countByte || noOptions)
   {
-    finalOutput += $"{Counter.GetBytes(file)} ";
+    finalOutput += $"{Counter.GetBytes(File.OpenRead(fileName))} ";
   }
   finalOutput += fileName;
 
   Console.WriteLine(finalOutput);
-  file.Close();
 }

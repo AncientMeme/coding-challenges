@@ -1,5 +1,3 @@
-
-using System.Text;
 using System.Text.RegularExpressions;
 
 public class Counter
@@ -28,7 +26,23 @@ public class Counter
 
   public static int GetWords(string content)
   {
-    int words = Regex.Matches(content, @"\b\w+\b").Count;
+    int words = 0;
+    bool inWord = false;
+    char[] whitespace = {' ', '\t', '\r', '\n'};
+    foreach(char c in content) {
+      if (whitespace.Contains(c))
+      {
+        if (inWord)
+        {
+          inWord = false;
+          words++;
+        }
+      }
+      else
+      {
+        inWord = true;
+      }
+    }
     return words;
   }
 }
