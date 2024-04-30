@@ -34,13 +34,13 @@ public class CounterTest
 
     [Theory]
     [TextfileData("test.txt")]
-    public void GetWordTest(FileInfo fileInfo, string content)
+    public void GetWordsTest(FileInfo fileInfo, string content)
     {
       // Arrange
       var _ = fileInfo;
 
       // Act
-      int wordCount = Counter.GetWord(content);
+      int wordCount = Counter.GetWords(content);
 
       // Assert
       Assert.Equal(58164, wordCount);

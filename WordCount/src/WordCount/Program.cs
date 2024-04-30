@@ -15,7 +15,7 @@ var charOption = new Option<bool>(
 );
 var lineOption = new Option<bool>(
   name: "--line",
-  description: "The number of lines in a file"
+  description: "The number of newline characters in a file"
 );
 var wordOption = new Option<bool>(
   name: "--word",
@@ -45,4 +45,41 @@ void WordCountHandler(string? fileName, bool countByte, bool countChar, bool cou
     Console.WriteLine("No file provided");
     Environment.Exit(1);
   }
+
+  // Read the file
+  FileStream file = File.OpenRead(fileName);
+  string content;
+  using(StreamReader reader = new(file))
+  {
+    content = reader.ReadToEnd();
+  }
+
+  // Handle Options
+  bool noOptions = false;
+  if (!countByte && !countChar && !countLine && !countWord)
+  {
+    noOptions = true;
+  }
+
+  string finalOutput = "";
+  if (countLine || noOptions)
+  {
+    finalOutput += $"{Counter.GetLines(content)} ";
+  }
+  if (countWord || noOptions)
+  {
+    finalOutput += $"{Counter.GetWords(content)} ";
+  }
+  if (countChar || noOptions)
+  {
+    finalOutput += $"{Counter.GetChars(content)} ";
+  }
+  if (countByte)
+  {
+    finalOutput += $"{Counter.GetBytes(file)} ";
+  }
+  finalOutput += fileName;
+
+  Console.WriteLine(finalOutput);
+  file.Close();
 }
