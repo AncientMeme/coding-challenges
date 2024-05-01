@@ -33,36 +33,38 @@ rootCommand.AddOption(byteOption);
 rootCommand.AddOption(charOption);
 rootCommand.AddOption(lineOption);
 rootCommand.AddOption(wordOption);
-
 rootCommand.SetHandler(WordCountHandler, fileArgument, byteOption, charOption, lineOption, wordOption);
 await rootCommand.InvokeAsync(args);
 
 void WordCountHandler(string? fileName, bool countByte, bool countChar, bool countLine, bool countWord)
 {
-  // Handle no file or '-'
+  // Get bytes and content from stream
+  int bytes = 0;
+  string content = "";
   if (fileName == null || fileName.Equals("-"))
   {
-    Console.WriteLine("No file provided");
-    Environment.Exit(1);
+    // Handle no file or '-'
+    using(Stream stdin = Console.OpenStandardInput())
+    {
+      var byteContent = GetStdinBytes(stdin);
+      bytes = byteContent.Length;
+      content = System.Text.Encoding.UTF8.GetString(byteContent);
+    }
   }
-
-  // Read the file
-  string content;
-  using(FileStream file = File.OpenRead(fileName))
-  using(StreamReader reader = new(file))
+  else
   {
-    content = reader.ReadToEnd();
-  }
-
-  // Handle Options
-  bool noOptions = false;
-  if (!countByte && !countChar && !countLine && !countWord)
-  {
-    noOptions = true;
+    // Read provided file
+    using(FileStream file = File.OpenRead(fileName))
+    using(StreamReader reader = new(file))
+    {
+      bytes = Counter.GetBytes(file);
+      content = reader.ReadToEnd();
+    }
   }
 
   // Build Output
-  string finalOutput = "";
+  bool noOptions = !countByte && !countChar && !countLine && !countWord;
+  string finalOutput = "  ";
   if (countLine || noOptions)
   {
     finalOutput += $"{Counter.GetLines(content)} ";
@@ -77,9 +79,22 @@ void WordCountHandler(string? fileName, bool countByte, bool countChar, bool cou
   }
   if (countByte || noOptions)
   {
-    finalOutput += $"{Counter.GetBytes(File.OpenRead(fileName))} ";
+    finalOutput += $"{bytes} ";
   }
-  finalOutput += fileName;
-
+  if (fileName != null && !fileName.Equals("-"))
+  {
+    finalOutput += fileName;
+  }
   Console.WriteLine(finalOutput);
+}
+
+byte[] GetStdinBytes(Stream stdin)
+{
+  List<byte> bytes = new();
+  int next;
+  while((next = stdin.ReadByte()) != -1)
+  {
+    bytes.Add((byte)next);
+  }
+  return bytes.ToArray();
 }

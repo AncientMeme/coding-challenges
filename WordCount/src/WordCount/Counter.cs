@@ -2,14 +2,9 @@ using System.Text.RegularExpressions;
 
 public class Counter
 {
-  public static int GetBytes(FileStream stream)
+  public static int GetBytes(Stream stream)
   {
-    int bytes = 0;
-    while(stream.ReadByte() != -1)
-    {
-      bytes++;
-    }
-    return bytes;
+    return (int)stream.Length;
   }
 
   public static int GetLines(string content)
