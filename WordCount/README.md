@@ -12,7 +12,7 @@ Options:
 - `-l`: Outputs line break characters(\n) in the file
 - `-w`: Outputs the word count of the file. A word is defined as a string of characters delimited by spaces, tabs, or newline characters.
 
-If no options are given, the tool outputs line count, word count, and byte count at the same time.\
+If no options are given, the tool outputs line count, word count, and byte count at the same time.
 
 `file`: The file to be read from. If no file is provided or file is `-`, the program will read from `stdin`. All of these command are considered valid:
 ```
