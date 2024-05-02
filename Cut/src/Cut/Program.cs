@@ -1,2 +1,3 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using System.CommandLine;
+
+var rootCommand = new RootCommand("A tool for cutting selected portion from each line in a file");
