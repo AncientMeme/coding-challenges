@@ -17,7 +17,7 @@ public class Cutter
         // Input is 1-indexed
         if (targetFields.Contains(i + 1))
         {
-          builder.Append($"{fields[i]} ");
+          builder.Append($"{fields[i]}{delimiter}");
         }
       }
       builder.Remove(builder.Length - 1, 1);

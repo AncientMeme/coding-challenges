@@ -26,4 +26,28 @@ public class CutterTest
         Assert.Equal(expectedOutput[i], result[i]);
       }
     }
+
+    [Theory]
+    [FileDataAttribute("TestFiles/fourchords.csv")]
+    public void CommaDelimiterTest(string[] content)
+    {
+      // Arrange
+      int[] fields = {1};
+      string[] expectedOutput = {
+        "Song title",
+        "\"10000 Reasons (Bless the Lord)\"",
+        "\"20 Good Reasons\"",
+        "\"Adore You\"",
+        "\"Africa\"",
+      };
+
+      // Act
+      string[] result = Cutter.Cut(content, fields, ',');
+
+      // Assert
+      for(int i = 0; i < expectedOutput.Length; ++i)
+      {
+        Assert.Equal(expectedOutput[i], result[i]);
+      }
+    }
 }
