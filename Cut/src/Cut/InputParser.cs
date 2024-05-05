@@ -4,22 +4,27 @@ public class InputParser
   public static string[]? GetEntries(string? file)
   {
     List<string> entries = new();
+    Stream stream;
+    StreamReader reader;
     if (file == null || file.Equals("-"))
     {
-      return null;
+      // Read from stdin
+      stream = Console.OpenStandardInput();
+      reader = new(stream);
     }
     else
     {
-      using(FileStream stream = File.OpenRead(file))
-      using(StreamReader reader = new(stream))
-      {
-        string? line;
-        while((line = reader.ReadLine()) != null)
-        {
-          entries.Add(line);
-        }
-      }
+      // Read from file
+      stream = File.OpenRead(file);
+      reader = new(stream);
     }
+    
+    string? line;
+    while((line = reader.ReadLine()) != null)
+    {
+      entries.Add(line);
+    }
+    reader.Close();
 
     return entries.ToArray();
   }

@@ -2,7 +2,8 @@
 
 var fileArgument = new Argument<string?>(
   name: "file",
-  description: "The file to read from"
+  description: "The file to read from",
+  getDefaultValue: () => null
 );
 var fieldOption = new Option<string>(
   name: "--field",
