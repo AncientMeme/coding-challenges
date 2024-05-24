@@ -158,7 +158,10 @@ public class Lexer
       {
         Token previousToken = operators.Pop();
         tokens.Enqueue(previousToken);
-        previousPrecedent = valueTable[operators.Peek().value];
+        if (operators.Count > 0)
+        {
+          previousPrecedent = valueTable[operators.Peek().value];
+        }
       }
       operators.Push(token);
     }
