@@ -15,6 +15,9 @@ public class Parser
     {"-", (a, b) => a - b},
     {"*", (a, b) => a * b},
     {"/", (a, b) => a / b},
+    {"sin", (a, b) => Math.Sin(a)},
+    {"cos", (a, b) => Math.Cos(a)},
+    {"tan", (a, b) => Math.Tan(a)},
   };
   /// <value>
   /// The <c>Token</c> queue to consume in order to generate the outcome
@@ -50,15 +53,24 @@ public class Parser
         case TokenType.Operator:
           if (numbers.Count < 2)
           {
-            throw new InvalidOperationException("Bad Token Queue was passed in");
+            throw new InvalidOperationException("Invalid math operation was passed in");
           }
           double right = numbers.Pop();
           double left = numbers.Pop();
-          double result = Operate(left, right, token);
-          numbers.Push(result);
+          double OperatorResult = Operate(left, right, token);
+          numbers.Push(OperatorResult);
+          break;
+        case TokenType.Function:
+          if (numbers.Count < 1)
+          {
+            throw new InvalidOperationException("Invalid math function was passed in");
+          }
+          double number = numbers.Pop();
+          double functionResult = ProcessFunction(number, token);
+          numbers.Push(functionResult);
           break;
         default:
-          throw new InvalidDataException("Token queue contains invalid Token with TokenType");
+          throw new InvalidDataException($"Token queue contains invalid Token: {token.value}");
       }
     }
     // 3 digit accuracy
@@ -76,11 +88,35 @@ public class Parser
   /// <returns></returns>
   private double Operate(double left, double right, Token token)
   {
+    // Check for invalid tokens
     if (!operationTable.ContainsKey(token.value))
     {
       throw new InvalidOperationException($"Unknown operation: {token.value}");
     }
-    
+    if (token.value.Equals("/") && right == 0.0)
+    {
+      throw new DivideByZeroException("Expression resulted in division by zero");
+    }
     return operationTable[token.value](left, right);
+  }
+
+  /// <summary>
+  /// Runs the math function according to the token value
+  /// </summary>
+  /// <param name="number">The number to apply the function to</param>
+  /// <param name="token">The token containing the function</param>
+  /// <returns>The result of the function</returns>
+  /// <exception cref="InvalidOperationException">
+  /// The token contains unknown function
+  /// </exception>
+  private double ProcessFunction(double number, Token token)
+  {
+    // Check for invalid tokens
+    if (!operationTable.ContainsKey(token.value))
+    {
+      throw new InvalidOperationException($"Unknown operation: {token.value}");
+    }
+
+    return operationTable[token.value](number, number);
   }
 }

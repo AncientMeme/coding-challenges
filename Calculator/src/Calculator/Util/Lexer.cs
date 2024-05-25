@@ -8,6 +8,7 @@ public enum TokenType
 {
   Number,
   Operator,
+  Function,
   LeftBracket,
   RightBracket,
 }
@@ -52,13 +53,19 @@ public class Lexer
   /// <value>
   /// The table to lookup precedent for the operation
   /// </value>
-  private readonly Dictionary<string, int> valueTable = new()
+  private readonly Dictionary<string, int> precedentTable = new()
   {
     {"+", 2},
     {"-", 2},
     {"*", 3},
     {"/", 3},
     {"^", 4},
+  };
+  private readonly HashSet<string> functionTable = new()
+  {
+    {"sin"},
+    {"cos"},
+    {"tan"},
   };
   /// <value>
   /// The token queue to enqueue all generated token
@@ -90,7 +97,6 @@ public class Lexer
   {
     tokens = new();
     index = 0;
-    tokens = new();
     Stack<Token> operators = new(); // monotonic increase stack
     char c;
     while(index < input.Length)
@@ -104,14 +110,22 @@ public class Lexer
           index++;
           break;
         case '0' or '1' or '2' or '3' or '4' or '5' or '6' or '7' or '8' or '9':
-          string number = readNumber();
-          tokens.Enqueue(new Token(number, TokenType.Number));
+          ProcessNumber();
           break;
         case ' ':
           index++;
           break;
+        case '(':
+          operators.Push(new Token("(", TokenType.LeftBracket));
+          index++;
+          break;
+        case ')':
+          ProcessBracket(operators);
+          index++;
+          break;
         default:
-          throw new InvalidDataException($"Invalid character found: {c}");
+          ProcessFunction(operators);
+          break;
       }
     }
     while(operators.Count > 0)
@@ -122,10 +136,9 @@ public class Lexer
   }
 
   /// <summary>
-  /// Read the section of number in <c>input</c> and return it
+  /// Read the number in <c>input</c> and insert it into the queue as a token
   /// </summary>
-  /// <returns>The number inside <c>input</c></returns>
-  private string readNumber()
+  private void ProcessNumber()
   {
     string validCharacters = "0123456789.";
     int startIndex = index;
@@ -135,7 +148,8 @@ public class Lexer
       length++;
       index++;
     }
-    return input.Substring(startIndex, length);
+    string number = input.Substring(startIndex, length);
+    tokens.Enqueue(new Token(number, TokenType.Number));
   }
 
   /// <summary>
@@ -145,7 +159,7 @@ public class Lexer
   /// <param name="token">The token to be inserted</param>
   private void ProcessOperators(Stack<Token> operators, Token token)
   {
-    int precedent = valueTable[token.value];
+    int precedent = precedentTable[token.value];
     if (operators.Count == 0)
     {
       operators.Push(token);
@@ -153,17 +167,65 @@ public class Lexer
     else
     {
       // Maintain ascending precendent order in the stack
-      int previousPrecedent = valueTable[operators.Peek().value];
-      while (operators.Count > 0 && precedent < previousPrecedent)
+      Token lastToken = operators.Peek();
+      while (operators.Count > 0 && lastToken.type != TokenType.LeftBracket && precedent < precedentTable[lastToken.value])
       {
         Token previousToken = operators.Pop();
         tokens.Enqueue(previousToken);
         if (operators.Count > 0)
         {
-          previousPrecedent = valueTable[operators.Peek().value];
+          lastToken = operators.Peek();
         }
       }
       operators.Push(token);
+    }
+  }
+
+  /// <summary>
+  /// Push out all previous operators until left bracket is reached
+  /// </summary>
+  /// <param name="operators">The operator token stack</param>
+  private void ProcessBracket(Stack<Token> operators)
+  {
+    // Pop tokens until encountering left bracket
+    while(operators.Count > 0 && operators.Peek().type != TokenType.LeftBracket)
+    {
+      tokens.Enqueue(operators.Pop());
+    }
+    if (operators.Count == 0)
+    {
+      throw new InvalidDataException("Could not find left bracket in expression");
+    }
+
+    // Discard left bracket
+    operators.Pop();
+
+    if (operators.Count > 0 && operators.Peek().type == TokenType.Function)
+    {
+      tokens.Enqueue(operators.Pop());
+    }
+  }
+
+  private void ProcessFunction(Stack<Token> operators)
+  {
+    // Scan the function
+    int startIndex = index;
+    int length = 0;
+    while(index < input.Length && Char.IsLetter(input[index]))
+    {
+      length++;
+      index++;
+    }
+
+    // Check if the function exists
+    string function = input.Substring(startIndex, length);
+    if (functionTable.Contains(function))
+    {
+      operators.Push(new Token(function, TokenType.Function));
+    }
+    else
+    {
+      throw new InvalidDataException($"Invalid expression found: {function}");
     }
   }
 }
